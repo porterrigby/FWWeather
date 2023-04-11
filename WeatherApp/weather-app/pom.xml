@@ -32,6 +32,11 @@
       <artifactId>javafx-controls</artifactId>
       <version>${javafx.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -83,6 +88,11 @@
           <configuration>
             <mainClass>com.prigby.App</mainClass>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.10.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
