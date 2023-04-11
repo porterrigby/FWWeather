@@ -1,4 +1,4 @@
-package com.prigby.personal;
+package com.prigby;
 
 import static org.junit.Assert.assertTrue;
 

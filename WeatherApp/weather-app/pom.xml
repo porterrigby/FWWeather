@@ -4,11 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.prigby.personal</groupId>
-  <artifactId>WeatherApp</artifactId>
+  <groupId>com.prigby</groupId>
+  <artifactId>weather-app</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>WeatherApp</name>
+  <name>weather-app</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -16,6 +16,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <javafx.version>19</javafx.version>
+    <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
   </properties>
 
   <dependencies>
@@ -28,7 +30,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>20</version>
+      <version>${javafx.version}</version>
     </dependency>
   </dependencies>
 
@@ -74,11 +76,13 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-        <!--JavaFX plugin-->
         <plugin>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-maven-plugin</artifactId>
-          <version>0.0.8</version>
+          <version>${javafx.maven.plugin.version}</version>
+          <configuration>
+            <mainClass>com.prigby.App</mainClass>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
