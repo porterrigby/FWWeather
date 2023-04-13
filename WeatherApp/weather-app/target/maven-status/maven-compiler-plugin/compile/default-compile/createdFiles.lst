@@ -1,2 +1,3 @@
 com\prigby\App.class
+com\prigby\JSONParser.class
 com\prigby\MacroPane.class

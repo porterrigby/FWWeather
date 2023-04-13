@@ -1,7 +1,6 @@
 package com.prigby;
 
-import com.google.gson.annotations.JsonAdapter;
-
+import java.io.IOException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -14,7 +13,7 @@ import javafx.scene.paint.Color;
 
 public class MacroPane extends VBox {
 
-    public MacroPane() {
+    public MacroPane() throws IOException {
         this.setAlignment(Pos.CENTER);
 
         setHeight(BASELINE_OFFSET_SAME_AS_HEIGHT);
@@ -26,11 +25,12 @@ public class MacroPane extends VBox {
 
         // fetch API data
         
-
-
+        JSONParser parser = new JSONParser();
+        String temp = parser.getForcastString();
+        
 
         //XXX TOP OF VBOX
-        Label temperature = new Label("42");
+        Label temperature = new Label(temp);
         temperature.setAlignment(Pos.CENTER);
         temperature.setStyle(String.format("-fx-font-size: %d", 42));
 
