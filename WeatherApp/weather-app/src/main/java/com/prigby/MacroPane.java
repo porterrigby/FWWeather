@@ -26,7 +26,7 @@ public class MacroPane extends VBox {
         // fetch API data
         
         JSONParser parser = new JSONParser();
-        String temp = parser.getForcastString();
+        String temp = parser.getForcast();
         
 
         //XXX TOP OF VBOX
