@@ -12,7 +12,7 @@ public class App extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         MacroPane pane = new MacroPane();
-        Scene scene = new Scene(pane, 400, 600);
+        Scene scene = new Scene(pane, 400, 400);
 
         stage.setResizable(false);
         stage.setTitle("Weather App");
