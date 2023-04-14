@@ -15,19 +15,15 @@ public class MacroPane extends VBox {
 
     public MacroPane() throws IOException {
         this.setAlignment(Pos.CENTER);
-
-        setHeight(BASELINE_OFFSET_SAME_AS_HEIGHT);
+        this.setHeight(BASELINE_OFFSET_SAME_AS_HEIGHT);
 
         // set bg color, border rounding(??), and border insets(??)
         setBackground(new Background((
-                        new BackgroundFill(Color.ANTIQUEWHITE, CornerRadii.EMPTY, Insets.EMPTY))));
-
+                        new BackgroundFill(Color.DEEPSKYBLUE, CornerRadii.EMPTY, Insets.EMPTY))));
 
         // fetch API data
-        
         JSONParser parser = new JSONParser("43.6628", "-116.6879");
         String temp = parser.getTemperature();
-        
 
         //XXX TOP OF VBOX
         Label temperature = new Label(temp + "F");

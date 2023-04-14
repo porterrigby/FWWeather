@@ -62,7 +62,7 @@ public class JSONParser {
 
         while (jsonReader.hasNext()) {
             String name = jsonReader.nextName();
-            if (name.equals("forecast")) {
+            if (name.equals("forecastHourly")) {
                 result = jsonReader.nextString();
                 return result;
             } else if (name.equals("periods")) {
