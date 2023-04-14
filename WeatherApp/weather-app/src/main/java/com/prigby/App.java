@@ -15,7 +15,7 @@ public class App extends Application{
         Scene scene = new Scene(pane, 400, 400);
 
         stage.setResizable(false);
-        stage.setTitle("Weather App");
+        stage.setTitle("FWWeather");
         stage.setScene(scene);
         stage.show();
     }
