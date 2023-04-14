@@ -25,12 +25,12 @@ public class MacroPane extends VBox {
 
         // fetch API data
         
-        JSONParser parser = new JSONParser("", "");
+        JSONParser parser = new JSONParser("43.6628", "-116.6879");
         String temp = parser.getTemperature();
         
 
         //XXX TOP OF VBOX
-        Label temperature = new Label(temp);
+        Label temperature = new Label(temp + "F");
         temperature.setAlignment(Pos.CENTER);
         temperature.setStyle(String.format("-fx-font-size: %d", 42));
 

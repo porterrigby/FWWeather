@@ -15,37 +15,34 @@ public class JSONParser {
     public JSONParser(String lat, String lon) throws IOException {
         temperature = "";
         nwsForecastURL = "";
-        this.lat = "43.6628";
-        this.lon = "-116.6879";
+        this.lat = lat;
+        this.lon = lon;
 
         evalutaWeather();
     }
 
-    public void evalutaWeather() throws IOException {
+    public void evalutaWeather() throws IOException { // sets variables according to forecast of location
         JsonReader jsonReader = fetchGridJSON(lat, lon);
         nwsForecastURL = readJSON(jsonReader);
         jsonReader = fetchForecast(nwsForecastURL);
         temperature = readJSON(jsonReader);
     }
 
-    public void setLat(String lat) {
+    public void setLocation(String lat, String lon) {
         this.lat = lat;
-    }
-
-    public void setLon(String lon) {
         this.lon = lon;
     }
 
-    public String getForcastURL() {
-        return nwsForecastURL;
-    }
-
-    public String getTemperature() {
+    public String getTemperature() { // returns temperature for specified location
         return temperature;
     }
     
-    private String readJSON(JsonReader jsonReader) throws IOException {
-        jsonReader.beginObject();
+    private String getForcastURL() { // returns forecastURL for specified location
+        return nwsForecastURL;
+    }
+    
+    private String readJSON(JsonReader jsonReader) throws IOException { // general branching logic for reading
+        jsonReader.beginObject();                                       // json from nws api
         String result = "";
 
         while (jsonReader.hasNext()) {
@@ -59,7 +56,7 @@ public class JSONParser {
         return result;
     }
 
-    private String readProperties(JsonReader jsonReader) throws IOException {
+    private String readProperties(JsonReader jsonReader) throws IOException { // branch of readJSON
         jsonReader.beginObject();
         String result = "";
 
@@ -79,7 +76,7 @@ public class JSONParser {
         return "-2";
     }
 
-    private String readPeriods(JsonReader jsonReader) throws IOException {
+    private String readPeriods(JsonReader jsonReader) throws IOException { // branch of readJSON
         jsonReader.beginArray();
         jsonReader.beginObject();
         String result = "";
@@ -97,8 +94,8 @@ public class JSONParser {
         return "-3";
     }
 
-    private JsonReader fetchGridJSON(String lat, String lon) throws IOException {
-        JsonReader jsonReader;
+    private JsonReader fetchGridJSON(String lat, String lon) throws IOException {   // fetches JSON from nws api
+        JsonReader jsonReader;                                                      // for lat-lon location
         URL nwsLocation = new URL("https://api.weather.gov/points/" + lat + "," + lon);
         InputStream inputStream = nwsLocation.openStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -106,8 +103,8 @@ public class JSONParser {
         return jsonReader;
     }
 
-    private JsonReader fetchForecast(String nwsForecastURL) throws IOException {
-        JsonReader jsonReader;
+    private JsonReader fetchForecast(String nwsForecastURL) throws IOException {    // fetches forecast JSON for
+        JsonReader jsonReader;                                                      // location from nws api
         URL nwsForecast = new URL(nwsForecastURL);
         InputStream inputStream = nwsForecast.openStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
