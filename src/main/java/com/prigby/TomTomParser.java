@@ -2,7 +2,6 @@ package com.prigby;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -16,7 +15,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 public class TomTomParser {
-    private String baseURL, versionNumber, query, ext, key, request;
+    private String baseURL, versionNumber, query, ext, key;
+    private String request, freeFormAddress;
     private double lat, lon;
 
     public TomTomParser() {
@@ -31,40 +31,48 @@ public class TomTomParser {
     public void setQuery(String query) {
         this.query = query;
     }
-    
-    public void setLatLon(JsonReader jsonReader) throws IOException {
-        // TODO
-    }
 
     public double getLon() {
-        // TODO
-        return 0;
+        return this.lon;
     }
 
     public double getLat() {
-        // TODO
-        return 0;
+        return this.lat;
     }
 
     public void parseJSON() throws IOException, URISyntaxException {
         JsonObject jsonObject = new JsonObject();
         String jsonString = "";
 
+        // Set up http request
         URI uri = new URI(this.request);
         HttpURLConnection connection = (HttpURLConnection)uri.toURL().openConnection();
         connection.setRequestMethod("GET");
 
+        // grab http response
         InputStreamReader isReader = new InputStreamReader(connection.getInputStream());
         BufferedReader reader = new BufferedReader(isReader);
-        
+       
+        // format http response
         String line = "";
         while ((line = reader.readLine()) != null) {
             jsonString += line; 
         }
 
-        // TODO Porperly access elements
+        // navigate json from api and assign properties
         jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-        System.out.println(jsonObject.getAsJsonObject("results"));
+        
+        JsonObject address = jsonObject.getAsJsonArray("results").get(0)
+                                        .getAsJsonObject().get("address").getAsJsonObject();
+        JsonObject position = jsonObject.getAsJsonArray("results").get(0)
+                                        .getAsJsonObject().get("position").getAsJsonObject();
+       
+        this.freeFormAddress = address.get("freeformAddress").getAsString();
+        this.lat = Double.parseDouble(position.get("lat").getAsString());
+        this.lon = Double.parseDouble(position.get("lon").getAsString());
+
+        // TODO remove later
+        System.out.println(address + "\n" + position);
     }
 
     public JsonReader requestJSON() throws IOException, URISyntaxException, InterruptedException {
