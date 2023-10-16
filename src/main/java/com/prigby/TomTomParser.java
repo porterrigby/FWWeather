@@ -6,13 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse.BodyHandlers;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 
 public class TomTomParser {
     private String baseURL, versionNumber, query, ext, key;
@@ -26,10 +21,11 @@ public class TomTomParser {
         this.ext = "json";
         this.key = System.getenv("TOMTOM");
         this.request = "";
+        this.freeFormAddress = "--";
     }
    
-    public void setQuery(String query) {
-        this.query = query;
+    public void setQuery(String userQuery) {
+        this.query = userQuery;
     }
 
     public double getLon() {
@@ -38,6 +34,10 @@ public class TomTomParser {
 
     public double getLat() {
         return this.lat;
+    }
+
+    public String getAddress() {
+        return this.freeFormAddress;
     }
 
     public void parseJSON() throws IOException, URISyntaxException {
@@ -72,20 +72,7 @@ public class TomTomParser {
         this.lon = Double.parseDouble(position.get("lon").getAsString());
 
         // TODO remove later
-        System.out.println(address + "\n" + position);
-    }
-
-    public JsonReader requestJSON() throws IOException, URISyntaxException, InterruptedException {
-        JsonReader jsonReader = null;
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(getURI()).GET().build();
-
-        client.send(request, BodyHandlers.ofString());
-        return jsonReader;
-    }
-
-    private URI getURI() throws URISyntaxException {
-        return new URI(this.request);
+        System.out.println(freeFormAddress + "\n" + lat + " " + lon);
     }
 
     public void buildRequest() {

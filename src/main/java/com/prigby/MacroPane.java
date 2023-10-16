@@ -2,7 +2,6 @@ package com.prigby;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -22,6 +21,7 @@ import javafx.scene.text.Font;
 public class MacroPane extends VBox {
 
     public MacroPane() throws IOException, URISyntaxException {
+        TomTomParser ttParser = new TomTomParser();
         this.setAlignment(Pos.TOP_CENTER);
         this.setHeight(10);
 
@@ -30,12 +30,14 @@ public class MacroPane extends VBox {
                         new BackgroundFill(Color.DEEPSKYBLUE, CornerRadii.EMPTY, Insets.EMPTY))));
 
         // fetch TomTom API data (geocode)
-        TomTomParser ttParser = new TomTomParser();
-        // String lon = ttParser.getLong();
-        // String lat = ttParser.getLat();
+        ttParser.setQuery("boise-id"); // Temp value for testing. Eventually will use user input.
+        ttParser.buildRequest();
+        ttParser.parseJSON();
+        String lon = ttParser.getLon() + "";
+        String lat = ttParser.getLat() + "";
 
         // fetch NWS API data (weather)
-        NWSParser nwsParser = new NWSParser("43.6628", "-116.6879");
+        NWSParser nwsParser = new NWSParser(lat, lon);
         String temp = nwsParser.getTemperature();
 
         //XXX Top of VBOX
@@ -44,7 +46,7 @@ public class MacroPane extends VBox {
                                             CornerRadii.EMPTY, new BorderWidths(10)));
         topBox.setBorder(topBoxBorder);
 
-        Label location = new Label("Caldwell, ID");
+        Label location = new Label(ttParser.getAddress());
         location.setAlignment(Pos.TOP_LEFT);
         location.setFont(new Font("Helvetica", 28));
 
@@ -75,6 +77,8 @@ public class MacroPane extends VBox {
         Label info = new Label("Enter a location: ");
         info.setFont(new Font("Helvetica", 16));
         info.setAlignment(Pos.CENTER);
+
+        // TODO add functionality to search bar
         TextField searchBar = new TextField();
         searchBar.setFont(new Font("Helvetica", 14));
         searchBar.setAlignment(Pos.CENTER_LEFT);

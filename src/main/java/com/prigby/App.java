@@ -11,10 +11,6 @@ public class App extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        TomTomParser ttParser = new TomTomParser();
-        ttParser.setQuery("boise-id");
-        ttParser.buildRequest();
-        ttParser.parseJSON();
         MacroPane pane = new MacroPane();
         Scene scene = new Scene(pane, 400, 400);
 

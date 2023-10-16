@@ -43,10 +43,10 @@ public class NWSParser {
     public String getShortForecast() {
         return this.shortForecast;
     }
-    
-    private String getForcastURL() { // returns forecastURL for specified location
-        return this.nwsForecastURL;
-    }
+   
+    // private String getForcastURL() { // returns forecastURL for specified location
+    //     return this.nwsForecastURL;
+    // }
     
     private void readJSON(JsonReader jsonReader) throws IOException { // general branching logic for reading
         jsonReader.beginObject();                                       // json from nws api
