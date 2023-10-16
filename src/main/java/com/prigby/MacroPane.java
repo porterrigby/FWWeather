@@ -1,6 +1,8 @@
 package com.prigby;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,7 +21,7 @@ import javafx.scene.text.Font;
 
 public class MacroPane extends VBox {
 
-    public MacroPane() throws IOException {
+    public MacroPane() throws IOException, URISyntaxException {
         this.setAlignment(Pos.TOP_CENTER);
         this.setHeight(10);
 
@@ -27,9 +29,14 @@ public class MacroPane extends VBox {
         setBackground(new Background((
                         new BackgroundFill(Color.DEEPSKYBLUE, CornerRadii.EMPTY, Insets.EMPTY))));
 
-        // fetch API data
-        NWSParser parser = new NWSParser("43.6628", "-116.6879");
-        String temp = parser.getTemperature();
+        // fetch TomTom API data (geocode)
+        TomTomParser ttParser = new TomTomParser();
+        // String lon = ttParser.getLong();
+        // String lat = ttParser.getLat();
+
+        // fetch NWS API data (weather)
+        NWSParser nwsParser = new NWSParser("43.6628", "-116.6879");
+        String temp = nwsParser.getTemperature();
 
         //XXX Top of VBOX
         HBox topBox = new HBox();
@@ -54,7 +61,7 @@ public class MacroPane extends VBox {
         temperature.setAlignment(Pos.CENTER);
         temperature.setFont(new Font("Helvetica", 48));
 
-        Label shortForecast = new Label(parser.getShortForecast());
+        Label shortForecast = new Label(nwsParser.getShortForecast());
         shortForecast.setFont(new Font("Helvetica", 24));
         shortForecast.setAlignment(Pos.TOP_CENTER);
 

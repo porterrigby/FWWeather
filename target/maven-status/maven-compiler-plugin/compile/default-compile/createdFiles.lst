@@ -1,3 +1,4 @@
-com\prigby\App.class
 com\prigby\NWSParser.class
+com\prigby\TomTomParser.class
+com\prigby\App.class
 com\prigby\MacroPane.class
