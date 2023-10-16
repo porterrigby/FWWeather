@@ -3,7 +3,8 @@ package com.prigby;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import com.google.gson.stream.JsonReader;
 
 public class NWSParser {
@@ -13,7 +14,7 @@ public class NWSParser {
     private String nwsForecastURL;
     private String shortForecast;
 
-    public NWSParser(String lat, String lon) throws IOException {
+    public NWSParser(String lat, String lon) throws IOException, URISyntaxException {
         temperature = "";
         nwsForecastURL = "";
         shortForecast = "";
@@ -23,7 +24,7 @@ public class NWSParser {
         evalutaWeather();
     }
 
-    public void evalutaWeather() throws IOException { // sets variables according to forecast of location
+    public void evalutaWeather() throws IOException, URISyntaxException { // sets variables according to forecast of location
         JsonReader jsonReader = fetchGridJSON(lat, lon);
         readJSON(jsonReader);
         jsonReader = fetchForecastJSON(nwsForecastURL);
@@ -91,19 +92,19 @@ public class NWSParser {
         }
     }
 
-    private JsonReader fetchGridJSON(String lat, String lon) throws IOException {   // fetches JSON from nws api
+    private JsonReader fetchGridJSON(String lat, String lon) throws IOException, URISyntaxException {   // fetches JSON from nws api
         JsonReader jsonReader;                                                      // for lat-lon location
-        URL nwsLocation = new URL("https://api.weather.gov/points/" + lat + "," + lon);
-        InputStream inputStream = nwsLocation.openStream();
+        URI nwsLocation = new URI("https://api.weather.gov/points/" + lat + "," + lon);
+        InputStream inputStream = nwsLocation.toURL().openStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         jsonReader = new JsonReader(inputStreamReader);
         return jsonReader;
     }
 
-    private JsonReader fetchForecastJSON(String nwsForecastURL) throws IOException {    // fetches forecast JSON for
+    private JsonReader fetchForecastJSON(String nwsForecastURL) throws IOException, URISyntaxException {    // fetches forecast JSON for
         JsonReader jsonReader;                                                      // location from nws api
-        URL nwsForecast = new URL(nwsForecastURL);
-        InputStream inputStream = nwsForecast.openStream();
+        URI nwsForecast = new URI(nwsForecastURL);
+        InputStream inputStream = nwsForecast.toURL().openStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         jsonReader = new JsonReader(inputStreamReader);
         return jsonReader;
