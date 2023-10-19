@@ -43,11 +43,13 @@ public class NWSParser {
     public String getShortForecast() {
         return this.shortForecast;
     }
-   
+  
+    // Wasn't being used
     // private String getForcastURL() { // returns forecastURL for specified location
     //     return this.nwsForecastURL;
     // }
-    
+   
+    // TODO reimplement using JsonObject (example: TomTomParser)
     private void readJSON(JsonReader jsonReader) throws IOException { // general branching logic for reading
         jsonReader.beginObject();                                       // json from nws api
 
@@ -61,6 +63,7 @@ public class NWSParser {
         }
     }
 
+    // TODO reimplement using JsonObject (example: TomTomParser)
     private void readProperties(JsonReader jsonReader) throws IOException { // branch of readJSON
         jsonReader.beginObject();
 
@@ -76,6 +79,7 @@ public class NWSParser {
         }
     }
 
+    // TODO reimplement using JsonObject (example: TomTomParser)
     private void readPeriods(JsonReader jsonReader) throws IOException { // branch of readJSON
         jsonReader.beginArray();
         jsonReader.beginObject();

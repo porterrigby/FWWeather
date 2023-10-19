@@ -2,6 +2,9 @@ package com.prigby;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,9 +22,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class MacroPane extends VBox {
+    
+    TomTomParser ttParser;
+    TextField searchBar;
+    String lon, lat;
+    Label location;
 
     public MacroPane() throws IOException, URISyntaxException {
-        TomTomParser ttParser = new TomTomParser();
+        this.ttParser = new TomTomParser();
         this.setAlignment(Pos.TOP_CENTER);
         this.setHeight(10);
 
@@ -30,11 +38,11 @@ public class MacroPane extends VBox {
                         new BackgroundFill(Color.DEEPSKYBLUE, CornerRadii.EMPTY, Insets.EMPTY))));
 
         // fetch TomTom API data (geocode)
-        ttParser.setQuery("boise-id"); // Temp value for testing. Eventually will use user input.
-        ttParser.buildRequest();
-        ttParser.parseJSON();
-        String lon = ttParser.getLon() + "";
-        String lat = ttParser.getLat() + "";
+        this.ttParser.setQuery("boise-id"); // Temp value for testing. Eventually will use user input.
+        this.ttParser.buildRequest();
+        this.ttParser.parseJSON();
+        this.lon = this.ttParser.getLon() + "";
+        this.lat = this.ttParser.getLat() + "";
 
         // fetch NWS API data (weather)
         NWSParser nwsParser = new NWSParser(lat, lon);
@@ -46,9 +54,9 @@ public class MacroPane extends VBox {
                                             CornerRadii.EMPTY, new BorderWidths(10)));
         topBox.setBorder(topBoxBorder);
 
-        Label location = new Label(ttParser.getAddress());
-        location.setAlignment(Pos.TOP_LEFT);
-        location.setFont(new Font("Helvetica", 28));
+        this.location = new Label(this.ttParser.getAddress());
+        this.location.setAlignment(Pos.TOP_LEFT);
+        this.location.setFont(new Font("Helvetica", 28));
 
         topBox.getChildren().add(location);
 
@@ -79,14 +87,35 @@ public class MacroPane extends VBox {
         info.setAlignment(Pos.CENTER);
 
         // TODO add functionality to search bar
-        TextField searchBar = new TextField();
-        searchBar.setFont(new Font("Helvetica", 14));
-        searchBar.setAlignment(Pos.CENTER_LEFT);
+        EventHandler<ActionEvent> searchBarHandler = (ActionEvent event) -> handleSearchBar(event);
+        this.searchBar = new TextField();
+        this.searchBar.setOnAction(searchBarHandler);
 
+        this.searchBar.setFont(new Font("Helvetica", 14));
+        this.searchBar.setAlignment(Pos.CENTER_LEFT);
 
         bottomBox.getChildren().addAll(info, searchBar);
         
         // Add Boxes To Pane
         getChildren().addAll(topBox, middleBox, shortForecast, bottomBox);
+    }
+
+    // Handles search bar entries
+    private void handleSearchBar(ActionEvent event) {
+        try {
+            update(this.searchBar.getText());
+        } catch (Exception e) {
+            System.out.println("Failed to parse.");
+            System.out.println("MacroPane.handleSearchBar()");
+        }
+    }
+
+    private void update(String query) throws IOException, URISyntaxException {
+        this.ttParser.setQuery(query); 
+        this.ttParser.buildRequest();
+        this.ttParser.parseJSON();
+        this.lon = this.ttParser.getLon() + "";
+        this.lat = this.ttParser.getLat() + "";
+        this.location.setText(this.ttParser.getAddress()); 
     }
 }

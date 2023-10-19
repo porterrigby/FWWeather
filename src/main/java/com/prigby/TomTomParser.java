@@ -1,11 +1,9 @@
 package com.prigby;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -40,25 +38,29 @@ public class TomTomParser {
         return this.freeFormAddress;
     }
 
-    public void parseJSON() throws IOException, URISyntaxException {
+    public void parseJSON() {
         JsonObject jsonObject = new JsonObject();
         String jsonString = "";
 
-        // Set up http request
-        URI uri = new URI(this.request);
-        HttpURLConnection connection = (HttpURLConnection)uri.toURL().openConnection();
-        connection.setRequestMethod("GET");
+        try {
+            // Set up http request
+            URI uri = new URI(this.request);
+            HttpURLConnection connection = (HttpURLConnection)uri.toURL().openConnection();
+            connection.setRequestMethod("GET");
 
-        // grab http response
-        InputStreamReader isReader = new InputStreamReader(connection.getInputStream());
-        BufferedReader reader = new BufferedReader(isReader);
-       
-        // format http response
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-            jsonString += line; 
+            // grab http response
+            InputStreamReader isReader = new InputStreamReader(connection.getInputStream());
+            BufferedReader reader = new BufferedReader(isReader);
+        
+            // format http response
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                jsonString += line; 
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to parse.");
+            System.out.println("TomTomParser.parseJSON()");
         }
-
         // navigate json from api and assign properties
         jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
         
