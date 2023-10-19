@@ -24,9 +24,10 @@ import javafx.scene.text.Font;
 public class MacroPane extends VBox {
     
     TomTomParser ttParser;
+    NWSParser nwsParser;
     TextField searchBar;
     String lon, lat;
-    Label location;
+    Label location, temperature, shortForecast;
 
     public MacroPane() throws IOException, URISyntaxException {
         this.ttParser = new TomTomParser();
@@ -45,8 +46,8 @@ public class MacroPane extends VBox {
         this.lat = this.ttParser.getLat() + "";
 
         // fetch NWS API data (weather)
-        NWSParser nwsParser = new NWSParser(lat, lon);
-        String temp = nwsParser.getTemperature();
+        this.nwsParser = new NWSParser(lat, lon);
+        String temp = this.nwsParser.getTemperature();
 
         //XXX Top of VBOX
         HBox topBox = new HBox();
@@ -67,13 +68,13 @@ public class MacroPane extends VBox {
                                             CornerRadii.EMPTY, new BorderWidths(10)));
         middleBox.setBorder(middleBoxBorder);
 
-        Label temperature = new Label(temp + "F");
-        temperature.setAlignment(Pos.CENTER);
-        temperature.setFont(new Font("Helvetica", 48));
+        this.temperature = new Label(temp + "F");
+        this.temperature.setAlignment(Pos.CENTER);
+        this.temperature.setFont(new Font("Helvetica", 48));
 
-        Label shortForecast = new Label(nwsParser.getShortForecast());
-        shortForecast.setFont(new Font("Helvetica", 24));
-        shortForecast.setAlignment(Pos.TOP_CENTER);
+        this.shortForecast = new Label(nwsParser.getShortForecast());
+        this.shortForecast.setFont(new Font("Helvetica", 24));
+        this.shortForecast.setAlignment(Pos.TOP_CENTER);
 
         middleBox.getChildren().addAll(temperature, shortForecast);
 
@@ -103,19 +104,23 @@ public class MacroPane extends VBox {
     // Handles search bar entries
     private void handleSearchBar(ActionEvent event) {
         try {
-            update(this.searchBar.getText());
+            updateQuery(this.searchBar.getText());
         } catch (Exception e) {
             System.out.println("Failed to parse.");
             System.out.println("MacroPane.handleSearchBar()");
         }
     }
 
-    private void update(String query) throws IOException, URISyntaxException {
+    private void updateQuery(String query) throws IOException, URISyntaxException {
         this.ttParser.setQuery(query); 
         this.ttParser.buildRequest();
         this.ttParser.parseJSON();
         this.lon = this.ttParser.getLon() + "";
         this.lat = this.ttParser.getLat() + "";
+        this.nwsParser.setLocation(lat, lon);
+        this.nwsParser.evalutaWeather();
+        this.temperature.setText(this.nwsParser.getTemperature() + "F");
+        this.shortForecast.setText(this.nwsParser.getShortForecast());
         this.location.setText(this.ttParser.getAddress()); 
     }
 }
