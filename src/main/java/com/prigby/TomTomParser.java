@@ -49,17 +49,17 @@ public class TomTomParser {
             connection.setRequestMethod("GET");
 
             // grab http response
-            InputStreamReader isReader = new InputStreamReader(connection.getInputStream());
-            BufferedReader reader = new BufferedReader(isReader);
+            InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+            BufferedReader br = new BufferedReader(isr);
         
             // format http response
             String line = "";
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 jsonString += line; 
             }
         } catch (Exception e) {
-            System.out.println("Failed to parse.");
-            System.out.println("TomTomParser.parseJSON()");
+            System.out.print("Failed to parse ");
+            System.out.println("@ TomTomParser.parseJSON()");
         }
         // navigate json from api and assign properties
         jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
